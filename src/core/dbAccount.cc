@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "dbAccount.h"
+#include "common.h"
 
 const char g_ptfile[] = "account.txt";
 T_Account *g_ptHeadAccount = NULL;
@@ -41,18 +42,23 @@ int dbReadTXT()
 int dbWriteTXT()
 {
     FILE *fpWrite = fopen(g_ptfile, "w");
-
+    
     T_Account *ptTemp = g_ptHeadAccount;
     for(; ptTemp != NULL; )
     {   
+        char date[30] = {0};
         fprintf(fpWrite, "%s,", ptTemp->accountName);
         fprintf(fpWrite, "%s,", ptTemp->billName);
         fprintf(fpWrite, "%f,", ptTemp->money);
-        fprintf(fpWrite, "%s,", ptTemp->creatTime);
+        
+        DateToStr(ptTemp->creatTime, date);
+        fprintf(fpWrite, "%s,", date);
+        
         fprintf(fpWrite, "%s,", ptTemp->tag);
         fprintf(fpWrite, "%s\n", ptTemp->comment);
         ptTemp = ptTemp->next;
     }
+    dbDelAllAccount();
     return 0;
 }
 
@@ -87,13 +93,15 @@ int dbBuffOffset(char *ptBuff, char cDelimit, char *ptStr, int *ptOffset)
 int dbBuffToAccount(char *ptBuff, T_Account *ptAcount)
 {
     int dwOffset = 0;
-    char ucMoney[100] = {0};
+    char money[50] = {0};
+    char date[50] = {0};
     
     dbBuffOffset(&ptBuff[dwOffset], ',', ptAcount->accountName, &dwOffset);
     dbBuffOffset(&ptBuff[dwOffset], ',', ptAcount->billName, &dwOffset);
-    dbBuffOffset(&ptBuff[dwOffset], ',', ucMoney, &dwOffset);
-    ptAcount->money = atof(ucMoney);
-    dbBuffOffset(&ptBuff[dwOffset], ',', ptAcount->creatTime, &dwOffset);
+    dbBuffOffset(&ptBuff[dwOffset], ',', money, &dwOffset);
+    ptAcount->money = atof(money);
+    dbBuffOffset(&ptBuff[dwOffset], ',', date, &dwOffset);
+    StrToDate(date, &ptAcount->creatTime);
     dbBuffOffset(&ptBuff[dwOffset], ',', ptAcount->tag, &dwOffset);
     dbBuffOffset(&ptBuff[dwOffset], '\n', ptAcount->comment, &dwOffset);
     

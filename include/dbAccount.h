@@ -3,12 +3,18 @@
 #include "stdio.h"
 
 const int g_charLen = 50;
+typedef struct tag_Date
+{
+    int    year;
+    int    month;
+    int    day;
+}T_Date;
 typedef struct tag_Accout
 {
     char    accountName[g_charLen];
     char    billName[g_charLen];
     float   money;
-    char    creatTime[g_charLen];
+    T_Date  creatTime;
     char    tag[g_charLen];
     char    comment[g_charLen];
     struct tag_Accout *next;
