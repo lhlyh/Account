@@ -1,5 +1,5 @@
-#ifndef _READ_WRITE_TXT_H_
-#define _READ_WRITE_TXT_H_
+#ifndef _DB_ACCOUNT_H_
+#define _DB_ACCOUNT_H_
 #include "stdio.h"
 
 const int g_charLen = 50;
@@ -14,12 +14,12 @@ typedef struct tag_Accout
     struct tag_Accout *next;
 }T_Account;
 
-
-int dbBuffToAccount(char *ptString, T_Account *ptAcount);
-int printfAccount(T_Account *tAccount);
-int printfAllAccount();
 int dbReadTXT();
 int dbWriteTXT();
-int delAllAccount();
+int dbBuffOffset(char *ptBuff, char cDelimit, char *ptStr, int *ptOffset);
+int dbBuffToAccount(char *ptString, T_Account *ptAcount);
+
+int dbDelAllAccount();
+T_Account* dbGetptHead();
 
 #endif
